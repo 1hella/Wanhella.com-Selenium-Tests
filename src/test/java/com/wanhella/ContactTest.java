@@ -59,7 +59,8 @@ public class ContactTest {
     @Test
     void testHeading() {
         driver.get(URL);
-        WebElement heading = driver.findElement(By.tagName("h1"));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement heading = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("h1")));
         assertThat(heading.getText()).isEqualTo("Contact Me");
     }
 
