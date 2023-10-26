@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -72,10 +71,7 @@ public class HomeTest {
         List<WebElement> projectTitles = driver.findElements(By.tagName("h2"));
         assertThat(projectTitles.size()).isGreaterThan(0);
 
-        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
         for (WebElement projectTitle : projectTitles) {
-            javascriptExecutor.executeScript("arguments[0].scrollIntoView(true);", projectTitle);
-
             assertThat(projectTitle.isDisplayed()).isTrue();
 
             // Search for image first then the description above and the link below.
