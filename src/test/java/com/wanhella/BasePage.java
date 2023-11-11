@@ -39,7 +39,7 @@ public class BasePage {
     }
 
     public void click(By element) {
-        find(element).click();
+        click(find(element));
     }
 
     public void click(WebElement element) {
@@ -47,7 +47,7 @@ public class BasePage {
     }
 
     public void type(By element, String text) {
-        find(element).sendKeys(text);
+        type(find(element), text);
     }
 
     public void type(WebElement element, String text) {
@@ -59,13 +59,7 @@ public class BasePage {
     }
 
     public boolean isDisplayed(By locator) {
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        } catch (TimeoutException e) {
-            System.out.printf("Timeout of %s wait for %s%n", timeoutSec, locator);
-            return false;
-        }
-        return true;
+        return isDisplayed(find(locator));
     }
 
     public boolean isDisplayed(WebElement element) {
