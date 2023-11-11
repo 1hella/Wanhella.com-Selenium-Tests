@@ -1,101 +1,64 @@
 package com.wanhella;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.locators.RelativeLocator;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.invoke.MethodHandles.lookup;
-import static org.slf4j.LoggerFactory.getLogger;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class HomeTest {
 
     static final Logger log = getLogger(lookup().lookupClass());
-
-    private WebDriver driver;
-
-    private final String URL = "https://wanhella.com";
-
-
-    @BeforeAll
-    static void setupClass() {
-        WebDriverManager.chromedriver().setup();
-    }
+    private HomePage homePage;
 
     @BeforeEach
     void setup() {
-        driver = new ChromeDriver();
+        homePage = new HomePage("chrome");
     }
 
     @AfterEach
     void teardown() {
-        driver.quit();
+        homePage.quit();
     }
 
     @Test
     void testTitle() {
-        driver.get(URL);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        String title = "Home \u2022 Stephen Wanhella";
-        wait.until(ExpectedConditions.titleIs(title));
-        assertThat(driver.getTitle()).isEqualTo(title);
+        assertThat(homePage.getPageTitle()).isEqualTo(HomePage.TITLE);
     }
 
     @Test
-    void testElementsAppearOnPage() {
-        driver.get(URL);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement header = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("stephen-wanhella")));
-        assertThat(header.getText()).isEqualTo("Stephen Wanhella");
+    void testHeader() {
+        assertThat(homePage.getPageHeader()).isEqualTo(HomePage.HEADER_TEXT);
+    }
 
-        WebElement intro = driver.findElement(By.xpath("//p[contains(text(), \"Hi, I'm Stephen!\")]"));
-        assertThat(intro.isDisplayed()).isTrue();
+    @Test
+    void testIntroduction() {
+        assertThat(homePage.introIsDisplayed()).isTrue();
+    }
 
-        WebElement projectHeadline = driver.findElement(By.xpath("//p[contains(text(), \"projects\")]"));
-        assertThat(projectHeadline.isDisplayed()).isTrue();
+    @Test
+    void testProjects() {
+        assertThat(homePage.projectsHeadlineIsDisplayed()).isTrue();
 
-        List<WebElement> projectTitles = driver.findElements(By.tagName("h2"));
+        List<String> projectTitles = homePage.getProjectTitles();
         assertThat(projectTitles.size()).isGreaterThan(0);
 
-        for (WebElement projectTitle : projectTitles) {
-            assertThat(projectTitle.isDisplayed()).isTrue();
-
-            // Search for image first then the description above and the link below.
-            // Otherwise, the test gets the link instead of the description for some reason.
-            RelativeLocator.RelativeBy imgRelativeBy = RelativeLocator.with(By.tagName("img"));
-            WebElement img = driver.findElement(imgRelativeBy.below(projectTitle));
-
-            assertThat(img.isDisplayed()).isTrue();
-
-            RelativeLocator.RelativeBy descriptionRelativeBy = RelativeLocator.with(By.tagName("p"));
-            WebElement description = driver.findElement(descriptionRelativeBy.above(img));
-
-            assertThat(description.isDisplayed()).isTrue();
-
-            RelativeLocator.RelativeBy linkRelativeBy = RelativeLocator.with(By.tagName("a"));
-            WebElement link = driver.findElement(linkRelativeBy.below(img));
-
-            assertThat(link.isDisplayed()).isTrue();
-            List<String> linkOptions = Arrays.asList("Source Code", "Link");
-            assertThat(link.getText()).isIn(linkOptions);
+        for (String projectTitle : projectTitles) {
+            assertThat(homePage.projectTitleIsDisplayed(projectTitle)).isTrue();
+            assertThat(homePage.projectImageIsDisplayed(projectTitle)).isTrue();
+            assertThat(homePage.projectDescriptionIsDisplayed(projectTitle)).isTrue();
+            assertThat(homePage.projectLinkTextIsAccurate(projectTitle)).isTrue();
         }
+    }
 
-        WebElement contactMe = driver.findElement(By.xpath("//a[text()='Contact Me']"));
-        assertThat(contactMe.getText()).isEqualTo("Contact Me");
-        assertThat(contactMe.getAttribute("href")).contains("/Contact_Me");
+    @Test
+    void testContactMe() {
+        assertThat(homePage.getContactMeText()).isEqualTo("Contact Me");
+        assertThat(homePage.getContactMeHref()).contains("/Contact_Me");
     }
 }

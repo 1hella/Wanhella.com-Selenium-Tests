@@ -14,7 +14,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 
 import java.time.Duration;
-import java.util.List;
 
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,7 +80,7 @@ public class ContactTest {
     void testFormValidation() {
         driver.get(URL);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement submitButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[text()='Submit']")));
+        WebElement submitButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[text()='Email Me']")));
         submitButton.click();
 
         WebElement nameAlert = wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -120,7 +119,7 @@ public class ContactTest {
         assertThat(emailField.getAttribute("value")).isEqualTo("test@wanhella.com");
         assertThat(messageField.getAttribute("value")).isEqualTo("This is a test message from Selenium. Please ignore.");
 
-        WebElement submitButton = driver.findElement(By.xpath("//p[text()='Submit']"));
+        WebElement submitButton = driver.findElement(By.xpath("//p[text()='Email Me']"));
         submitButton.click();
 
         // wait for success message
