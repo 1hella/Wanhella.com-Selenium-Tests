@@ -1,19 +1,16 @@
 package com.wanhella;
 
+import com.wanhella.pages.HomePage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
 
 import java.util.List;
 
-import static java.lang.invoke.MethodHandles.lookup;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.slf4j.LoggerFactory.getLogger;
 
 public class HomeTest {
 
-    static final Logger log = getLogger(lookup().lookupClass());
     private HomePage homePage;
 
     @BeforeEach
@@ -58,7 +55,7 @@ public class HomeTest {
 
     @Test
     void testContactMe() {
-        assertThat(homePage.getContactMeText()).isEqualTo("Contact Me");
-        assertThat(homePage.getContactMeHref()).contains("/Contact_Me");
+        assertThat(homePage.getContactMeText()).isEqualTo(HomePage.CONTACT_ME_TEXT);
+        assertThat(homePage.getContactMeHref()).contains(HomePage.CONTACT_ME_HREF);
     }
 }

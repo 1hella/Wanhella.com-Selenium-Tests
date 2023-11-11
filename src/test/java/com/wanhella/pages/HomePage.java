@@ -1,4 +1,4 @@
-package com.wanhella;
+package com.wanhella.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -11,7 +11,9 @@ import java.util.Set;
 
 public class HomePage extends BasePage {
     public static final String HEADER_TEXT = "Stephen Wanhella";
-    private final String URL = "https://wanhella.com";
+    public static final String CONTACT_ME_TEXT = "Contact Me";
+    public static final CharSequence CONTACT_ME_HREF = "/Contact_Me";
+    private static final String URL = "https://wanhella.com";
     public static final String TITLE = "Home \u2022 Stephen Wanhella";
 
     By header = By.id("stephen-wanhella");

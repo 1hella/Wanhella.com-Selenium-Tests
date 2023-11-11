@@ -1,4 +1,4 @@
-package com.wanhella;
+package com.wanhella.pages;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
@@ -17,11 +17,16 @@ public class BasePage {
 
     public BasePage(String browser) {
         driver = WebDriverManager.getInstance(browser).create();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSec));
+        updateWait();
     }
 
     public void setTimeoutSec(int timeoutSec) {
         this.timeoutSec = timeoutSec;
+        updateWait();
+    }
+
+    private void updateWait() {
+        wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSec));
     }
 
     public void quit() {
@@ -47,6 +52,7 @@ public class BasePage {
     }
 
     public void type(By element, String text) {
+        isDisplayed(element);
         type(find(element), text);
     }
 
@@ -58,8 +64,18 @@ public class BasePage {
         return driver.getTitle();
     }
 
+    public String getInputText(By element) {
+        return find(element).getAttribute("value");
+    }
+
     public boolean isDisplayed(By locator) {
-        return isDisplayed(find(locator));
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        } catch (TimeoutException e) {
+            System.out.printf("Timeout of %s wait for %s%n", timeoutSec, locator);
+            return false;
+        }
+        return true;
     }
 
     public boolean isDisplayed(WebElement element) {
