@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class BasePage {
     WebDriver driver;
@@ -41,6 +42,10 @@ public class BasePage {
 
     public WebElement find(By element) {
         return driver.findElement(element);
+    }
+
+    public List<WebElement> findMultiple(By locator) {
+        return driver.findElements(locator);
     }
 
     public void click(By element) {

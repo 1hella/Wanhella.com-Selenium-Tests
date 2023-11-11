@@ -17,7 +17,6 @@ public class HomePage extends BasePage {
     public static final String TITLE = "Home \u2022 Stephen Wanhella";
 
     By header = By.id("stephen-wanhella");
-
     By intro = By.xpath("//p[contains(text(), \"Hi, I'm Stephen!\")]");
     By contactMe = By.xpath("//a[text()='Contact Me']");
     By projectsHeadline = By.xpath("//p[contains(text(), \"projects\")]");
@@ -47,7 +46,7 @@ public class HomePage extends BasePage {
     }
 
     public List<String> getProjectTitles() {
-        return driver.findElements(projectTitles).stream().map(WebElement::getText).toList();
+        return findMultiple(projectTitles).stream().map(WebElement::getText).toList();
     }
 
     public boolean projectsHeadlineIsDisplayed() {
@@ -55,7 +54,7 @@ public class HomePage extends BasePage {
     }
 
     private WebElement getProject(String title) {
-        return driver.findElement(By.xpath("//h2//span[text()='" + title + "']"));
+        return find(By.xpath("//h2//span[text()='" + title + "']"));
     }
 
     public String getContactMeText() {
@@ -75,7 +74,7 @@ public class HomePage extends BasePage {
     public boolean projectImageIsDisplayed(String title) {
         WebElement projectTitle = getProject(title);
         RelativeLocator.RelativeBy imgRelativeBy = RelativeLocator.with(By.tagName("img"));
-        WebElement img = driver.findElement(imgRelativeBy.below(projectTitle));
+        WebElement img = find(imgRelativeBy.below(projectTitle));
 
         return isDisplayed(img);
     }
@@ -83,10 +82,10 @@ public class HomePage extends BasePage {
     public boolean projectDescriptionIsDisplayed(String title) {
         WebElement projectTitle = getProject(title);
         RelativeLocator.RelativeBy imgRelativeBy = RelativeLocator.with(By.tagName("img"));
-        WebElement img = driver.findElement(imgRelativeBy.below(projectTitle));
+        WebElement img = find(imgRelativeBy.below(projectTitle));
 
         RelativeLocator.RelativeBy descriptionRelativeBy = RelativeLocator.with(By.tagName("p"));
-        WebElement description = driver.findElement(descriptionRelativeBy.above(img));
+        WebElement description = find(descriptionRelativeBy.above(img));
 
         return isDisplayed(description);
     }
@@ -94,10 +93,10 @@ public class HomePage extends BasePage {
     public boolean projectLinkTextIsAccurate(String title) {
         WebElement projectTitle = getProject(title);
         RelativeLocator.RelativeBy imgRelativeBy = RelativeLocator.with(By.tagName("img"));
-        WebElement img = driver.findElement(imgRelativeBy.below(projectTitle));
+        WebElement img = find(imgRelativeBy.below(projectTitle));
 
         RelativeLocator.RelativeBy linkRelativeBy = RelativeLocator.with(By.tagName("a"));
-        WebElement link = driver.findElement(linkRelativeBy.below(img));
+        WebElement link = find(linkRelativeBy.below(img));
 
         Set<String> linkOptions = Set.of("Source Code", "Link");
         return linkOptions.contains(link.getText());
